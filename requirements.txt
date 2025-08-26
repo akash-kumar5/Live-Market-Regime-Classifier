@@ -1,0 +1,6 @@
+websocket-client
+pandas
+numpy
+ta
+joblib
+lightgbm
