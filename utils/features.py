@@ -62,13 +62,6 @@ def _calculate_features_for_tf(df, tf_suffix):
     return df
 
 def generate_features(merged_df, main_tf, context_tfs):
-    """
-    Generates all features required by the model for all specified timeframes.
-    
-    CRITICAL CHANGE: This function now correctly loops through all timeframes
-    and generates the features listed in the metadata file. It also returns the
-    full DataFrame, not just the last row.
-    """
     df = merged_df.copy()
     
     all_tfs = [main_tf] + context_tfs
@@ -82,14 +75,6 @@ def generate_features(merged_df, main_tf, context_tfs):
     return df.dropna()
 
 def merge_timeframes(main_tf_name,main_df, context_dfs):
-    """
-    Merges context timeframe data into the main timeframe DataFrame.
-    This is the missing function, implemented to work in-memory.
-    
-    Args:
-        main_df (pd.DataFrame): The DataFrame for the main prediction timeframe (e.g., 15m).
-        context_dfs (dict): A dictionary of DataFrames for context (e.g., {'5m': df_5m, '1h': df_1h}).
-    """
     # Start with a copy of the main timeframe data
     # Ensure timestamp is the index and sorted for merge_asof
     main_df = main_df.copy().set_index('t').sort_index()

@@ -1,4 +1,4 @@
-# live_pipeline.py
+# main.py
 import os
 import time
 import pandas as pd
@@ -11,8 +11,7 @@ import json
 import traceback
 
 # --- Add src path to import our feature engineering logic ---
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
+
 #
 # !! CRITICAL: Import the NEW merge_timeframes function and the corrected generate_features !!
 from utils.features import generate_features, merge_timeframes 
@@ -21,8 +20,8 @@ from utils.fetch_binance_klines import fetch_binance_klines
 # --- Configuration ---
 MODEL_FOLDER = "models/"
 SYMBOL = "BTCUSDT"
-MAIN_TF = '15m'
-CONTEXT_TFS = ['5m', '1h']
+MAIN_TF = '5m'
+CONTEXT_TFS = ['1m', '15m']
 TIME_STEPS = 64 # This MUST match the lookback window used for training
 
 class LiveInferencePipeline:
@@ -51,7 +50,7 @@ class LiveInferencePipeline:
         print("Prefilling historical data for all timeframes...")
         
         # Calculate start time as a millisecond timestamp
-        start_dt = datetime.now() - timedelta(days=45)
+        start_dt = datetime.now() - timedelta(days=200)
         start_ms = int(start_dt.timestamp() * 1000)
         
         print(f"Fetching data since {start_dt.strftime('%Y-%m-%d')} for all timeframes...")
@@ -93,7 +92,7 @@ class LiveInferencePipeline:
                         self.data_store[tf] = updated_df.drop_duplicates(subset='t', keep='last')
 
             # The rest of the function remains the same...
-            cutoff_date = datetime.now() - timedelta(days=45)
+            cutoff_date = datetime.now() - timedelta(days=200)
             for tf in [MAIN_TF] + CONTEXT_TFS:
                 self.data_store[tf] = self.data_store[tf][self.data_store[tf]['t'] >= cutoff_date]
 

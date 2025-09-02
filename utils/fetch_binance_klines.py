@@ -4,16 +4,7 @@ import pandas as pd
 from datetime import datetime
 import time
 
-def fetch_binance_klines(symbol="BTCUSDT", interval="15m", start_time_ms=None, limit=1000):
-    """
-    Fetches historical klines from Binance. If start_time_ms is provided, it fetches all data
-    from that millisecond timestamp until now, handling pagination automatically.
-
-    :param symbol: Trading symbol (e.g., "BTCUSDT")
-    :param interval: Timeframe (e.g., "15m", "1h", "1d")
-    :param start_time_ms: Start time in milliseconds since epoch.
-    :return: DataFrame with kline data.
-    """
+def fetch_binance_klines(symbol="BTCUSDT", interval="5m", start_time_ms=None, limit=1000):
     url = "https://api.binance.com/api/v3/klines"
     # limit = 1000  # Max limit per request
     all_data = []
